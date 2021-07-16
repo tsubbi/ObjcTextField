@@ -32,22 +32,23 @@
 //
 //    [textField setAttributedText:mutableAttributeString];
     // This still has flaw of auto add space after red.
+    // and can not back spacing for red
     NSString *inputString = textField.text;
     NSArray *elementsByWord = [inputString componentsSeparatedByString:@" "];
     NSMutableAttributedString *replaceAttributeString = [[NSMutableAttributedString alloc] init];
     NSMutableArray *newString = [[NSMutableArray alloc] init];
     
     for (int i=0; i<[elementsByWord count]; i++) {
-        if (![elementsByWord[i] isEqual:@"red"]) {
-            [newString addObject:elementsByWord[i]];
-        } else {
-            NSString *blackString = [newString componentsJoinedByString:@" "];
+        if ([elementsByWord[i] isEqual:@"red"] || [elementsByWord[i] isEqual:@"Red"] || [elementsByWord[i] isEqual:@"RED"]) {
+            NSString *blackString = [NSString stringWithFormat:@"%@ ", [newString componentsJoinedByString:@" "]];
             NSAttributedString *blackAttributeString = [[NSAttributedString alloc]initWithString:blackString attributes:@{NSForegroundColorAttributeName: [UIColor blackColor]}];
-            NSString *redString = [NSString stringWithFormat:@" %@ ", elementsByWord[i]];
+            NSString *redString = [NSString stringWithFormat:@"%@ ", elementsByWord[i]];
             NSAttributedString *redAttributeString = [[NSAttributedString alloc]initWithString:redString attributes:@{NSForegroundColorAttributeName: [UIColor redColor]}];
             newString = [NSMutableArray new];
             [replaceAttributeString appendAttributedString:blackAttributeString];
             [replaceAttributeString appendAttributedString:redAttributeString];
+        } else {
+            [newString addObject:elementsByWord[i]];
         }
     }
     
